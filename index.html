@@ -1,6 +1,6 @@
  <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
+<!--<meta charset="UTF-8">
 <title>Page Title</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="">
@@ -10,5 +10,67 @@
 <body>
 	<a href="CatGameShooter.html"> Cat Game Shooter</a> <br>
 	<a href="DontHitTheLambo.html"> Don't Hit The Lambo Game</a>
+</body>-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilia's Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .game-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .game-item {
+            margin: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ilia's Games</h1>
+    <div class="game-list" id="gameList"></div>
+
+    <script>
+        const games = [
+            { title: "Cat Game Shooter", url: "CatGameShooter.html" },
+            { title: "Don't Hit The Lambo Game", url: "DontHitTheLambo.html" }
+            // Add more games here as needed
+        ];
+
+        const gameList = document.getElementById('gameList');
+
+        games.forEach(game => {
+            const gameItem = document.createElement('div');
+            gameItem.className = 'game-item';
+
+            const gameTitle = document.createElement('h2');
+            gameTitle.textContent = game.title;
+
+            const iframe = document.createElement('iframe');
+            iframe.src = game.url;
+
+            gameItem.appendChild(gameTitle);
+            gameItem.appendChild(iframe);
+            gameList.appendChild(gameItem);
+        });
+    </script>
+	
 </body>
 </html> 
+
