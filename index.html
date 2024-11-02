@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilia's Games</title>
+    <title>Ilia's (junior) Games</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,6 +39,14 @@
             border: 1px solid #ddd;
             border-radius: 8px;
         }
+        .game-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        .game-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -59,8 +67,14 @@
             const gameItem = document.createElement('div');
             gameItem.className = 'game-item';
 
+            const gameLink = document.createElement('a');
+            gameLink.href = game.url;
+            gameLink.target = "_blank";
+            gameLink.className = 'game-link';
+            gameLink.textContent = game.title;
+
             const gameTitle = document.createElement('h2');
-            gameTitle.textContent = game.title;
+            gameTitle.appendChild(gameLink);
 
             const iframe = document.createElement('iframe');
             iframe.src = game.url;
@@ -70,7 +84,7 @@
             gameList.appendChild(gameItem);
         });
     </script>
-	
+
 </body>
 </html> 
 
