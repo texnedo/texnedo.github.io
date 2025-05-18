@@ -1,0 +1,143 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Web Page</title>
+    <style>
+        hr.red-line {
+            border: none;
+            border-top: 2px solid red;
+            margin: 24px 0;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+        }
+        body {
+            background-color: green;
+        }
+    </style>
+</head>
+<body style="background-color: green;">
+    <canvas id="snow-canvas"></canvas>
+    <h1>Welcome to My Web Page</h1>
+    <p>This is a simple HTML page.</p>
+    <a href="https://www.example.com" class="btn btn-primary">Click Me!</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('.btn').addEventListener('click', function() {
+            alert('Button clicked!');
+        });
+
+        // Snow animation with mouse avoidance
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        let mouse = { x: width / 2, y: height / 2, radius: 60 };
+
+        let animationCount = 0;
+
+        window.addEventListener('resize', () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function randomBetween(a, b) {
+            return Math.random() * (b - a) + a;
+        }
+
+        class Snowflake {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = randomBetween(0, width);
+                this.y = randomBetween(-height, 0);
+                this.radius = randomBetween(1.5, 4.5);
+                this.speed = randomBetween(1, 2.5);
+                this.wind = randomBetween(-0.7, 0.7);
+            }
+            update() {
+                // Mouse avoidance
+                let dx = this.x - mouse.x;
+                let dy = this.y - mouse.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < mouse.radius + this.radius) {
+                    // Move away from mouse
+                    let angle = Math.atan2(dy, dx);
+                    this.x += Math.cos(angle) * 2;
+                    this.y += Math.sin(angle) * 2;
+                } else {
+                    this.x += this.wind;
+                    this.y += this.speed;
+                }
+                // Respawn at top if out of view
+                if (this.y > height + this.radius || this.x < -this.radius || this.x > width + this.radius) {
+                    this.reset();
+                    this.y = -this.radius;
+                }
+            }
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'white';
+                ctx.globalAlpha = 0.85;
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        const snowflakes = [];
+        for (let i = 0; i < 100; i++) {
+            snowflakes.push(new Snowflake());
+        }
+
+        let lastTime = 0;
+        const fps = 10;
+        const interval = 1000 / fps;
+
+        function animate(now) {
+            animationCount++;
+            if (!lastTime || now - lastTime >= interval) {
+                lastTime = now;
+                if (animationCount % 10 === 0) {
+                    console.log('Animating ' + animationCount);   
+                }
+                ctx.clearRect(0, 0, width, height);
+                for (let flake of snowflakes) {
+                    flake.update();
+                    flake.draw(ctx);
+                }
+            } else {
+                if (animationCount % 10 === 0) {
+                    console.log('Skipping frame ' + animationCount);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+    <hr class="red-line">
+</body>
+</html>
